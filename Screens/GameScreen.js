@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {Text, View, StyleSheet, Alert} from 'react-native';
 
 import Colors from '../component/Colors';
@@ -17,15 +17,19 @@ function generateRandomBetween(min, max, exclude) {
 
 var lowerVal = 1, higherVal = 100;
 
-function GameScreen({userInputNo}) {
+function GameScreen({userInputNo, gameOverFlag}) {
 
-    const initialGuess = generateRandomBetween(lowerVal, higherVal, userInputNo);
+    const initialGuess = generateRandomBetween(1, 100, userInputNo);
     const [currentGuessNo, setCurrentGuessNo] = useState(initialGuess);
+
+    useEffect(()=> {
+        if(currentGuessNo === userInputNo) {
+            gameOverFlag(true);
+        }
+    }, [currentGuessNo, userInputNo]);
 
     function nextRandomNumber(direction)    // direction=> 'lower'/'higher'
     {
-        console.log(currentGuessNo+"::"+userInputNo);
-
         if(
             (direction === 'lower' && currentGuessNo < userInputNo) || 
             (direction === 'higher' && currentGuessNo > userInputNo)) 
@@ -36,6 +40,8 @@ function GameScreen({userInputNo}) {
                     style: 'cancel'
                 }
             ]);
+
+            return;
         }
         else {
             if(direction === 'lower') {
