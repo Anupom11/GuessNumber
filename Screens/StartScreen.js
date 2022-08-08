@@ -101,7 +101,8 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 24,
-        fontWeight: 'bold',
+        fontFamily: 'OpenSans-Bold',
+        //fontWeight: 'bold',
         color: Colors.primary100,
         textAlign:'center',
         borderWidth: 2,
