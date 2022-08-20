@@ -10,21 +10,24 @@ function generateRandomBetween(min, max, exclude) {
   
     if (rndNum === exclude) {
       return generateRandomBetween(min, max, exclude);
-    } else {
+    } 
+    else {
       return rndNum;
     }
 }
 
 var lowerVal = 1, higherVal = 100;
 
-function GameScreen({userInputNo, gameOverFlag}) {
+function GameScreen({userInputNo, gameOverFlag, guessCountNo}) {
 
     const initialGuess = generateRandomBetween(1, 100, userInputNo);
     const [currentGuessNo, setCurrentGuessNo] = useState(initialGuess);
+    const [guessCount, setGuessCount] = useState(0);
 
     useEffect(()=> {
         if(currentGuessNo === userInputNo) {
             gameOverFlag(true);
+            guessCountNo(guessCount);
         }
     }, [currentGuessNo, userInputNo]);
 
@@ -53,6 +56,8 @@ function GameScreen({userInputNo, gameOverFlag}) {
     
             const newRandNo = generateRandomBetween(lowerVal, higherVal, currentGuessNo);
             setCurrentGuessNo(newRandNo);
+
+            setGuessCount(guessCount+1);
         }
     }
 
