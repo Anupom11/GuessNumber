@@ -23,7 +23,7 @@ function GameOver({roundNumber, useNumber, onStartNewGame}) {
             round to guess the 
             <Text style={styles.textHighlighted}> {useNumber} </Text>
         </Text>
-        <PrimaryButton title='Restart' onPressed={doRestartOp}/>
+        <PrimaryButton title='Restart' onPressed={doRestartOp} enableFlag={true}/>
     </View>
 }
 

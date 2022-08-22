@@ -5,24 +5,16 @@ import Colors from '../component/Colors';
 import ResultTextView from '../component/ResultTextView';
 import PrimaryButton from '../component/PrimaryButton';
 
-function generateRandomBetween(min, max, exclude) {
-    const rndNum = Math.floor(Math.random() * (max - min)) + min;
-  
-    if (rndNum === exclude) {
-      return generateRandomBetween(min, max, exclude);
-    } 
-    else {
-      return rndNum;
-    }
-}
-
 var lowerVal = 1, higherVal = 100;
+
+var buttonPressedFlag = true;
 
 function GameScreen({userInputNo, gameOverFlag, guessCountNo}) {
 
     const initialGuess = generateRandomBetween(1, 100, userInputNo);
-    const [currentGuessNo, setCurrentGuessNo] = useState(initialGuess);
-    const [guessCount, setGuessCount] = useState(0);
+    
+    const [currentGuessNo, setCurrentGuessNo]   = useState(initialGuess);
+    const [guessCount, setGuessCount]           = useState(0);
 
     useEffect(()=> {
         if(currentGuessNo === userInputNo) {
@@ -31,8 +23,28 @@ function GameScreen({userInputNo, gameOverFlag, guessCountNo}) {
         }
     }, [currentGuessNo, userInputNo]);
 
+    function generateRandomBetween(min, max, exclude) {
+        const rndNum = Math.floor(Math.random() * (max - min)) + min;
+      
+        if (rndNum === exclude) {
+            return generateRandomBetween(min, max, exclude);
+        } 
+        else {
+            return rndNum;
+        }
+    }
+
     function nextRandomNumber(direction)    // direction=> 'lower'/'higher'
     {
+        //-------------------------------
+        if(buttonPressedFlag) {
+            buttonPressedFlag = false;
+        }
+        else {
+            return;
+        }
+        //-------------------------------
+
         if(
             (direction === 'lower' && currentGuessNo < userInputNo) || 
             (direction === 'higher' && currentGuessNo > userInputNo)) 
@@ -43,6 +55,8 @@ function GameScreen({userInputNo, gameOverFlag, guessCountNo}) {
                     style: 'cancel'
                 }
             ]);
+
+            buttonPressedFlag = true;
 
             return;
         }
@@ -55,8 +69,12 @@ function GameScreen({userInputNo, gameOverFlag, guessCountNo}) {
             }
     
             const newRandNo = generateRandomBetween(lowerVal, higherVal, currentGuessNo);
-            setCurrentGuessNo(newRandNo);
 
+            if(newRandNo !== currentGuessNo) {
+                buttonPressedFlag = true;
+            }
+
+            setCurrentGuessNo(newRandNo);
             setGuessCount(guessCount+1);
         }
     }
@@ -68,8 +86,8 @@ function GameScreen({userInputNo, gameOverFlag, guessCountNo}) {
             <View style={{alignItems:'center'}}>
                 <Text>Higher or Lower</Text>
                 <View style={{flexDirection:'row'}}>
-                    <PrimaryButton onPressed={nextRandomNumber.bind(this, 'higher')} title='+'/>
-                    <PrimaryButton onPressed={nextRandomNumber.bind(this, 'lower')} title='-'/>
+                    <PrimaryButton onPressed={nextRandomNumber.bind(this, 'higher')} title='+' enableFlag={buttonPressedFlag}/>
+                    <PrimaryButton onPressed={nextRandomNumber.bind(this, 'lower')} title='-' enableFlag={buttonPressedFlag}/>
                 </View>
             </View>
         </View>
