@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import {Text, View, StyleSheet, Alert} from 'react-native';
+import {Text, View, StyleSheet, Alert, Dimensions} from 'react-native';
 
 import Colors from '../component/Colors';
 import ResultTextView from '../component/ResultTextView';
@@ -8,6 +8,9 @@ import PrimaryButton from '../component/PrimaryButton';
 var lowerVal = 1, higherVal = 100;
 
 var buttonPressedFlag = true;
+
+const deviceWidth   = Dimensions.get('window').width;
+const deviceHeight  = Dimensions.get('window').height;
 
 function GameScreen({userInputNo, gameOverFlag, guessCountNo}) {
 
@@ -99,7 +102,7 @@ export default GameScreen;
 const styles = StyleSheet.create({
     screen: {
         flex:1,
-        padding: 24
+        padding: 24,
     },
     title: {
         fontSize: 24,
@@ -108,6 +111,8 @@ const styles = StyleSheet.create({
         textAlign:'center',
         borderWidth: 2,
         borderColor: Colors.primary100,
-        padding: 12
+        padding: 12,
+        maxWidth: '100%',
+        marginBottom: deviceHeight < 500 ? 5 : 10
     }
 });

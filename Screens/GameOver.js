@@ -1,18 +1,25 @@
-import {Text, View, StyleSheet, Image} from 'react-native';
+import {Text, View, StyleSheet, Image, Dimensions, useWindowDimensions} from 'react-native';
 import Colors from '../component/Colors';
 
 import PrimaryButton from '../component/PrimaryButton';
 
+const deviceWidth = Dimensions.get('window').width;
+
 function GameOver({roundNumber, useNumber, onStartNewGame}) {
+
+    const {width, height} = useWindowDimensions();
 
     // method to do the on restart operation
     const doRestartOp=()=> {
         onStartNewGame();
     }
 
-    return <View style={styles.rootContainer}>
+    const paddingDistance = height < 400 ? 5 : 24;
+
+    return <View style={[styles.rootContainer, {padding: paddingDistance}]}>
         <Text style={styles.mainText}>Game Over!</Text>
         <View style={styles.imageContainer}>
+            {console.log("Wid:"+height+"::"+paddingDistance)}
             <Image 
                 style={styles.imageStyle} 
                 source={require('../assets/images/success.png')}/>
@@ -32,7 +39,6 @@ export default GameOver;
 const styles = StyleSheet.create({
     rootContainer: {
         flex: 1,
-        padding: 24,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -45,9 +51,9 @@ const styles = StyleSheet.create({
         borderWidth: 2,
     },
     imageContainer: {
-        height: 300,
-        width: 300,
-        borderRadius: 150,
+        height: deviceWidth < 400 ? 100 : 300,
+        width: deviceWidth < 400 ? 100 : 300,
+        borderRadius: deviceWidth < 400 ? 50 : 150,
         borderWidth: 3,
         borderColor: Colors.primary100,
         overflow: 'hidden',
